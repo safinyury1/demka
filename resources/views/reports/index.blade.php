@@ -7,6 +7,7 @@
 	@vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
+	<x-app-layout>
     <a href="{{route ('reports.create')}}">Создать</a>
 
 	<div>
@@ -45,5 +46,6 @@
     @endforeach
 
 	{{$reports->links()}}
+</x-app-layout>
 </body>
 </html>
