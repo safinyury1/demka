@@ -9,11 +9,39 @@
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
+        <!-- Middlename -->
+        <div>
+            <x-input-label for="middlename" :value="__('Middlename')" />
+            <x-text-input id="middlename" class="block mt-1 w-full" type="text" name="middlename" :value="old('middlename')" autocomplete="middlename" />
+            <x-input-error :messages="$errors->get('middlename')" class="mt-2" />
+        </div>
+        
+        <!--Lastname -->
+        <div>
+            <x-input-label for="lastname" :value="__('Lastname')" />
+            <x-text-input id="lastname" class="block mt-1 w-full" type="text" name="lastname" :value="old('lastname')" autocomplete="lastname" />
+            <x-input-error :messages="$errors->get('lastname')" class="mt-2" />
+        </div>
+
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        </div>
+        
+        <!-- login -->
+        <div>
+            <x-input-label for="login" :value="__('Login')" />
+            <x-text-input id="login" class="block mt-1 w-full" type="text" name="login" :value="old('login')" autocomplete="login" />
+            <x-input-error :messages="$errors->get('login')" class="mt-2" />
+        </div>
+
+        <!-- Tel -->
+         <div>
+            <x-input-label for="tel" :value="__('Tel')" />
+            <x-text-input id="tel" class="block mt-1 w-full" type="text" name="tel" :value="old('tel')" autocomplete="tel" />
+            <x-input-error :messages="$errors->get('tel')" class="mt-2" />
         </div>
 
         <!-- Password -->
