@@ -1,14 +1,20 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\Admin;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/dashboard', function () { return view('dashboard');})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware((Admin::class))->group(function(){ 
+    Route::get('/admin',[AdminController::class,'index'])->name('admin.index');});
+    Route::patch('/reports/status/{report}/', [ReportController::class,'statusUpdate'])->name('reports.status.update');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -33,11 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/reports/{report}',[ReportController::class, 'destroy'])->name('reports.destroy');
 });
 
-Route::middleware((Admin::class))->group(function(){
 
-    Route::get('/admin', function (){ return view('admin.index');})->name('admin.index');
-    
-});
 
 
 require __DIR__.'/auth.php';
