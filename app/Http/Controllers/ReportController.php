@@ -86,10 +86,35 @@ class ReportController extends Controller
 
     public function show(Report $report)
     {
-        if (Auth::user()->id === $report->user_id) {
-            return view('reports.show', compact('report'));
-        } else {
+        
+        if (Auth::user()->email !== 'сорт@example.com' && Auth::user()->id !== $report->user_id) {
             abort(403, 'У вас нет прав на просмотр этой записи.');
         }
+        
+        return view('reports.show', compact('report'));
+    }
+
+    public function statusUpdate(Request $request, Report $report)
+    {
+        
+        if ($report->status_id != 1) {
+            return redirect()->back()->with('error', 'Можно изменять статус только у заявлений со статусом "Новое"');
+        }
+
+        
+        $request->validate([
+            'status_id' => 'required|exists:statuses,id|in:2,3',
+        ]);
+        
+        
+        $oldStatus = $report->status->name ?? 'Новое';
+        
+        
+        $report->update($request->only(['status_id']));
+        
+       
+        $newStatus = Status::find($request->status_id)->name;
+        
+        return redirect()->back()->with('success', "Статус заявления #{$report->id} изменен с '{$oldStatus}' на '{$newStatus}'");
     }
 }

@@ -21,6 +21,6 @@ class Admin
                 return $next($request);
             }
         }
-        return redirect('login')->with('error', 'Авторизитуйтесь под админа');
+        return redirect('login')->with('error', 'Авторизуйтесь под администратором');
     }
 }
