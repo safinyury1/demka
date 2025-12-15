@@ -6,7 +6,7 @@
     <title>Admin</title>
 </head>
 <body>
-   <x-app-layout>
+    <x-app-layout>
         <h1>Административная панель</h1>
 
         @if(session('success'))
@@ -24,6 +24,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Имя</th>
                     <th>Номер</th>
                     <th>Описание</th>
@@ -34,12 +35,19 @@
             </thead>
 
             <tbody>
-                @foreach ($reports as $report)
+                @forelse ($reports as $report)
                     <tr>
-                        <td>{{ $report->user->name }}</td>
+                        <td>{{ $report->id }}</td>
+                        <td>{{ $report->user->name ?? 'Не указано' }}</td>
                         <td><a href="{{ route('reports.show', $report->id) }}">{{ $report->number }}</a></td>
                         <td>{{ Str::limit($report->description, 100) }}</td>
-                        <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $report->created_at)->translatedFormat('j F Y H:i') }}</td>
+                        <td>
+                            @if($report->created_at)
+                                {{ $report->created_at->translatedFormat('j F Y H:i') }}
+                            @else
+                                Не указана
+                            @endif
+                        </td>
                         <td>
                             @if($report->status_id == 1)
                                 <span class="status-new">Новое</span>
@@ -52,14 +60,14 @@
                             @endif
                         </td>
                         <td>
-                            @if($report->status_id == 1) 
+                            @if($report->status_id == 1) {{-- Только для статуса "новое" (id=1) --}}
                                 <form class="status-form" action="{{ route('reports.status.update', $report->id) }}" method="POST">
                                     @method('patch')
                                     @csrf
                                     <select name="status_id" id="status_id_{{ $report->id }}">
-                                        
+                                        {{-- Показываем только статусы "Подтверждено" и "Отклонено" --}}
                                         @foreach ($statuses as $status)
-                                            @if($status->id == 2 || $status->id == 3) 
+                                            @if($status->id == 2 || $status->id == 3) {{-- Только id 2 и 3 --}}
                                                 <option value="{{ $status->id }}" {{ $status->id == $report->status_id ? 'selected' : '' }}>
                                                     {{ $status->name }}
                                                 </option>
@@ -74,7 +82,11 @@
                             @endif
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="7" style="text-align: center;">Нет заявлений</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </x-app-layout>

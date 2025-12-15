@@ -11,7 +11,10 @@ class AdminController extends Controller
 {
     public function index(){
         // Загружаем все заявки с отношениями user и status
-        $reports = Report::with(['user', 'status'])->orderBy('created_at', 'desc')->get();
+        // Используем with для безопасной загрузки отношений
+        $reports = Report::with(['user', 'status'])
+            ->orderBy('created_at', 'desc')
+            ->get();
         
         // Получаем все статусы
         $statuses = Status::all();
